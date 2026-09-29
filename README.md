@@ -1,16 +1,21 @@
 # Roaming Zombies
 
-**A horde mod for [SPT](https://www.sp-tarkov.com/) that turns every raid into survival horror.** Mixed hordes of infected bots spawn on every map, any time of day. Melee zombies hunt you down and swing knives in your face. Pistol zombies shoot from cover. One horde per raid — you get a notification, then they come.
+**A horde mod for [SPT](https://sp-mod.com/) that turns every raid into survival horror.** Mixed hordes of infected bots spawn on every map, any time of day. Melee zombies hunt you down and swing knives in your face. Pistol zombies shoot from cover. One horde per raid — you get a notification, then they come.
 
 > *"The dead are rising... zombies have been spotted nearby."*
 
-[Download v1.2.0](../../releases) · [Changelog](#changelog) · [Fika + ABPS compatible](#compatibility)
+[Download v1.2.2](../../releases) · [Changelog](#changelog) · [Fika + ABPS compatible](#compatibility)
 
 > ### ⚠️ I cannot stress this enough — zombies are a real challenge now
 >
-> Previous versions had zombies that shuffled around harmlessly. **v1.2.0 is a different mod.** Melee zombies actively hunt you, face you before each swing, and chain knife attacks at 1-second intervals. Pistol zombies engage from 15 m with real aim. A horde on Labs or night Factory can absolutely wipe you if you're not paying attention. **Plan your raid, bring ammo, watch your six.**
+> Previous versions had zombies that shuffled around harmlessly. **v1.2.0+ is a different mod.** Melee zombies actively hunt you, face you before each swing, and chain knife attacks at 1-second intervals. Pistol zombies engage from 15 m with real aim. A horde on Labs or night Factory can absolutely wipe you if you're not paying attention. **Plan your raid, bring ammo, watch your six.**
 
 ---
+
+## What's new in v1.2.2
+
+- **SPT 4.1.6 compatible** — server packages and `SptVersion` updated for the SP-Tushonka 4.1.x line (`~4.1.0`); install path corrected to `SPT_Runtime/user/mods` (4.1 layout).
+- Fixed client HUD notification after 4.1 deobfuscation (`NotificationManagerClass` → `NotificationManager`).
 
 ## What's new in v1.2.0
 
@@ -66,7 +71,7 @@ Tested. Works every raid, forever.
 
 | Requirement | Version |
 |---|---|
-| SPT | `~4.0.13` |
+| SPT | `~4.1.0` (tested / packaged for 4.1.6) |
 | BepInEx ConfigurationManager | *optional* (for F12 panel) |
 
 **No mod dependencies.** No BigBrain, no SAIN, no MoreBotsAPI. Self-contained.
@@ -82,7 +87,7 @@ Tested. Works every raid, forever.
 SPT Root/
 ├── BepInEx/plugins/ZombieHorde/
 │   └── ZombieHorde.Client.dll
-└── SPT/user/mods/ZombieHorde/
+└── SPT_Runtime/user/mods/ZombieHorde/
     ├── ZombieHorde.Server.dll
     └── config.json
 ```
@@ -102,7 +107,7 @@ If you skip this step on a headless and only install on the player machines, zom
 
 ## Configuration
 
-Edit `SPT/user/mods/ZombieHorde/config.json`:
+Edit `SPT_Runtime/user/mods/ZombieHorde/config.json`:
 
 ```json
 {
@@ -218,6 +223,12 @@ So we bypass the broken pursuit path entirely:
 ---
 
 ## Changelog
+
+### v1.2.2 — SPT 4.1.6
+- Declared compatibility for SPT 4.1.x (`~4.1.0`), packaged against SP-Tushonka 4.1.6 APIs.
+- Server NuGet refs moved to `SPTushonka.*` 4.1.6 (assemblies remain `SPTarkov.*`).
+- Install / release layout updated to `SPT_Runtime/user/mods` (SPT 4.1 path).
+- Client: `NotificationManagerClass` → `NotificationManager` (4.1 deobfuscation).
 
 ### v1.2.0 — "The Dead Actually Rise"
 The one that makes zombies threatening.

@@ -7,11 +7,12 @@
     <OutputPath>bin\$(Configuration)\ZombieHorde\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
+  <!-- SP-Tushonka publishes as SPTushonka.* (assemblies remain SPTarkov.*). -->
   <ItemGroup>
-    <PackageReference Include="SPTarkov.Common" Version="4.1.2" />
-    <PackageReference Include="SPTarkov.DI" Version="4.1.2" />
-    <PackageReference Include="SPTarkov.Server.Core" Version="4.1.2" />
-    <PackageReference Include="SPTarkov.Server.Web" Version="4.1.2" />
+    <PackageReference Include="SPTushonka.Common" Version="4.1.6" />
+    <PackageReference Include="SPTushonka.DI" Version="4.1.6" />
+    <PackageReference Include="SPTushonka.Server.Core" Version="4.1.6" />
+    <PackageReference Include="SPTushonka.Server.Web" Version="4.1.6" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="config.json" CopyToOutputDirectory="PreserveNewest" />
