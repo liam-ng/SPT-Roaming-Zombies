@@ -57,7 +57,9 @@ Zombies target the **closest human player** to each zombie, so in a Fika session
 
 ### ✅ ABPS (Acid's Bot Placement System)
 
-ABPS is a great mod, but its post-raid spawn wipe breaks most horde mods. We hook the same endpoint and re-inject zombie spawns **after** ABPS's wipe runs, every single raid. The mods coexist — ABPS does its scav wave thing, we keep the infected horde alive.
+ABPS owns PMC / Scav / boss placement (including its own SIC pages). Roaming Zombies only injects `infected*` boss-location rows and never rewrites faction spawn chances — tune scav/PMC density in ABPS, zombie density here.
+
+ABPS's post-raid spawn wipe still clears those infected rows. We hook the same endpoint and re-inject zombies **after** ABPS's wipe runs, every raid:
 
 ```
 /client/match/local/end
@@ -75,6 +77,13 @@ Tested. Works every raid, forever.
 | BepInEx ConfigurationManager | *optional* (for F12 panel) |
 
 **No mod dependencies.** No BigBrain, no SAIN, no MoreBotsAPI. Self-contained.
+
+### SIC Config Editor / Mod Page
+
+- **Mod Pages → Roaming Zombies** — full UI for every `config.json` field (including per-map `spawnChance`)
+- **Configs → Mod Configs → Roaming Zombies** — raw JSON editor (same file)
+
+**ABPS / other factions:** this mod only adds/removes `infected*` `BossLocationSpawn` rows. It does **not** override PMC, Scav, or boss spawn chances — tune those in ABPS's own SIC pages. If raids feel overcrowded, lower our `hordeSize` / set `ignoreMaxBots` to `false`, or reduce ABPS map limits.
 
 ---
 
@@ -111,6 +120,7 @@ Edit `SPT_Runtime/user/mods/ZombieHorde/config.json`:
 
 ```json
 {
+  "enabled": true,
   "hordeSize": {
     "min": 2,
     "max": 4
@@ -121,6 +131,7 @@ Edit `SPT_Runtime/user/mods/ZombieHorde/config.json`:
   },
   "ignoreMaxBots": true,
   "alwaysSpawn": false,
+  "spawnChanceMultiplier": 1.0,
   "spawnDelaySeconds": 120,
   "spawnChance": {
     "bigmap": 70,
@@ -141,10 +152,12 @@ Edit `SPT_Runtime/user/mods/ZombieHorde/config.json`:
 
 | Field | Description |
 |---|---|
+| `enabled` | Master on/off. `false` clears infected horde spawns and injects nothing |
 | `hordeSize.min` / `max` | Number of **melee** zombies per infected type (there are 4 types, so 2–4 × 4 = 8–16 melee zombies per raid at defaults) |
 | `pistolHordeSize.min` / `max` | Number of **pistol** zombies per infected type. Set both to `0` for melee-only hordes |
 | `ignoreMaxBots` | When `true`, zombies bypass the map's bot cap so they always spawn alongside other AI |
 | `alwaysSpawn` | **The "100% on every map" override.** When `true`, ignores `spawnChance` entirely — zombies spawn in every raid on every map. Also forces `ForceSpawn=true` so they ignore bot caps. Flip this on if you want guaranteed hordes everywhere, every raid |
+| `spawnChanceMultiplier` | Multiplies each map's `spawnChance` (result clamped 0–100). `0.5` halves rates; `2.0` doubles (capped at 100). Ignored when `alwaysSpawn` is true |
 | `spawnDelaySeconds` | Seconds after raid start before the horde spawns. Default 120 s gives you time to load in and orient yourself before it hits |
 | `spawnChance` | Per-map percent chance (0–100). Rolled server-side. Set to `100` for guaranteed spawns, `0` to disable zombies on a specific map |
 
@@ -229,6 +242,8 @@ So we bypass the broken pursuit path entirely:
 - Server NuGet refs moved to `SPTushonka.*` 4.1.6 (assemblies remain `SPTarkov.*`).
 - Install / release layout updated to `SPT_Runtime/user/mods` (SPT 4.1 path).
 - Client: `NotificationManagerClass` → `NotificationManager` (4.1 deobfuscation).
+- SIC Config Editor registration for `config.json` (`enabled`, `spawnChanceMultiplier`, existing spawn knobs).
+- Clears only `infected*` spawn rows before re-inject (safe with ABPS; does not touch PMC/Scav/boss chances).
 
 ### v1.2.0 — "The Dead Actually Rise"
 The one that makes zombies threatening.

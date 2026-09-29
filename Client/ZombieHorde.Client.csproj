@@ -71,6 +71,7 @@
       <AudioFiles Include="$(ProjectDir)Audio\*.*" Condition="Exists('$(ProjectDir)Audio\')" />
       <ServerDLL Include="$(ProjectDir)..\Server\bin\$(Configuration)\ZombieHorde\ZombieHorde.Server.dll" />
       <ServerConfig Include="$(ProjectDir)..\Server\bin\$(Configuration)\ZombieHorde\config.json" />
+      <ServerWwwroot Include="$(ProjectDir)..\Server\bin\$(Configuration)\ZombieHorde\wwwroot\**\*" />
     </ItemGroup>
 
     <!-- ============ Create release ZIP for SPT Forge (always runs first) ============ -->
@@ -81,6 +82,10 @@
 
     <Copy SourceFiles="@(ServerDLL);@(ServerConfig)"
           DestinationFolder="$(ProjectDir)release\$(ModName)\SPT_Runtime\user\mods\$(ModName)\" />
+
+    <Copy SourceFiles="@(ServerWwwroot)"
+          DestinationFolder="$(ProjectDir)release\$(ModName)\SPT_Runtime\user\mods\$(ModName)\wwwroot\"
+          Condition="'@(ServerWwwroot)' != ''" />
 
     <ZipDirectory SourceDirectory="$(ProjectDir)release\$(ModName)\"
                   DestinationFile="$(ProjectDir)release\$(ModName).zip" />
@@ -94,6 +99,11 @@
 
     <Copy SourceFiles="@(ServerDLL);@(ServerConfig)"
           DestinationFolder="$(TarkovServerModsDir)$(ModName)\"
+          ContinueOnError="true" />
+
+    <Copy SourceFiles="@(ServerWwwroot)"
+          DestinationFolder="$(TarkovServerModsDir)$(ModName)\wwwroot\"
+          Condition="'@(ServerWwwroot)' != ''"
           ContinueOnError="true" />
   </Target>
 
